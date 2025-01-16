@@ -2,31 +2,19 @@ export interface MediaContent {
   id: string;
   title: string;
   type: 'movie' | 'series';
-  status: 'watching' | 'completed' | 'planned';
   year: number;
+  status: 'watching' | 'completed' | 'planned';
+  platform?: 'netflix' | 'prime' | 'disney' | 'hbo' | 'apple' | 'mubi' | 'blutv' | 'exxen' | 'other';
+  posterUrl?: string;
   rating?: number;
   personalRating?: {
-    acting: number;
-    story: number;
-    visual: number;
-    sound: number;
+    story?: number;
+    acting?: number;
+    visuals?: number;
+    sound?: number;
   };
-  review?: string;
-  mood?: 'happy' | 'sad' | 'excited' | 'bored' | 'confused';
-  watchDate?: Date;
-  director?: string;
-  cast?: string[];
   tags?: string[];
-  posterUrl?: string;
-  bannerUrl?: string;
-  description?: string;
-  personalNotes?: string;
-  favorite?: boolean;
-  recommendTo?: string[];
-  platform?: string;
-  seasonCount?: number;
-  episodeCount?: number;
-  currentEpisode?: number;
-  language?: string;
-  duration?: number; // dakika cinsinden
+  mood?: 'happy' | 'sad' | 'excited' | 'bored' | 'confused';
+  watchDate?: string;
+  releaseYear?: number;
 } 

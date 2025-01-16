@@ -26,7 +26,12 @@
           </div>
 
           <div class="form-group">
-            <label for="year">Yıl</label>
+            <label for="releaseYear">Yapım Yılı</label>
+            <input id="releaseYear" type="number" formControlName="releaseYear">
+          </div>
+
+          <div class="form-group">
+            <label for="year">Eklenme Yılı</label>
             <input id="year" type="number" formControlName="year">
           </div>
         </div>
@@ -64,7 +69,19 @@
 
           <div class="form-group">
             <label for="platform">İzleme Platformu</label>
-            <input id="platform" type="text" formControlName="platform">
+            <select id="platform" formControlName="platform">
+              <option value="">Platform Seçin</option>
+              <option value="netflix">Netflix</option>
+              <option value="prime">Amazon Prime</option>
+              <option value="disney">Disney+</option>
+              <option value="hbo">HBO Max</option>
+              <option value="apple">Apple TV+</option>
+              <option value="mubi">MUBI</option>
+              <option value="blutv">BluTV</option>
+              <option value="exxen">Exxen</option>
+              <option value="gainTV">Gain</option>
+              <option value="other">Diğer</option>
+            </select>
           </div>
         </div>
 
@@ -118,9 +135,9 @@
             <div class="star-rating">
               <i *ngFor="let star of [1,2,3,4,5]" 
                 class="fas"
-                [class.fa-star]="personalRating.visual >= star"
-                [class.fa-star-regular]="personalRating.visual < star"
-                (click)="rateAspect('visual', star)">
+                [class.fa-star]="personalRating.visuals >= star"
+                [class.fa-star-regular]="personalRating.visuals < star"
+                (click)="rateAspect('visuals', star)">
               </i>
             </div>
           </div>

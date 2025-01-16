@@ -341,3 +341,34 @@
     }
   }
 } 
+
+// Yeni içerik başlığı
+.content-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: $spacing-unit * 6;
+  
+  .add-content {
+    background: $gradient-primary;
+    border: none;
+    padding: $spacing-unit * 4 $spacing-unit * 6;
+    border-radius: $border-radius-lg;
+    color: $text-primary;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-lg;
+    display: flex;
+    align-items: center;
+    gap: $spacing-unit * 2;
+    transition: all $transition-speed;
+    box-shadow: $shadow-md;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba($primary-color, 0.3);
+    }
+    
+    i {
+      font-size: $font-size-xl;
+    }
+  }
+} 

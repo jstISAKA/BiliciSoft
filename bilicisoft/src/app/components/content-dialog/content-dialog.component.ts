@@ -23,9 +23,9 @@ export class ContentDialogComponent implements OnInit {
   ];
 
   personalRating = {
-    acting: 0,
     story: 0,
-    visual: 0,
+    acting: 0,
+    visuals: 0,
     sound: 0
   };
 
@@ -34,45 +34,56 @@ export class ContentDialogComponent implements OnInit {
       title: ['', Validators.required],
       type: ['movie', Validators.required],
       year: [new Date().getFullYear(), [Validators.required, Validators.min(1900)]],
-      director: [''],
-      cast: [''],
-      duration: [null],
+      releaseYear: [null, [Validators.min(1900)]],
       status: ['planned', Validators.required],
       platform: [''],
-      seasonCount: [null],
-      episodeCount: [null],
-      currentEpisode: [null],
-      watchDate: [null],
       rating: [null],
       personalRating: [this.personalRating],
-      review: [''],
-      mood: [null],
       tags: [''],
       posterUrl: [''],
-      bannerUrl: [''],
-      description: [''],
-      personalNotes: [''],
-      favorite: [false],
-      recommendTo: [''],
-      language: [''],
+      mood: [null],
+      watchDate: [null]
     });
   }
 
   ngOnInit() {
     if (this.content) {
       this.contentForm.patchValue({
-        ...this.content,
+        title: this.content.title,
+        type: this.content.type,
+        year: this.content.year,
+        releaseYear: this.content.releaseYear,
+        status: this.content.status,
+        platform: this.content.platform || '',
+        rating: this.content.rating,
+        posterUrl: this.content.posterUrl || '',
         tags: this.content.tags?.join(', ') || '',
-        cast: this.content.cast?.join(', ') || '',
-        recommendTo: this.content.recommendTo?.join(', ') || ''
+        mood: this.content.mood,
+        watchDate: this.content.watchDate
       });
+
       if (this.content.personalRating) {
-        this.personalRating = this.content.personalRating;
+        this.personalRating = {
+          story: this.content.personalRating.story || 0,
+          acting: this.content.personalRating.acting || 0,
+          visuals: this.content.personalRating.visuals || 0,
+          sound: this.content.personalRating.sound || 0
+        };
+        this.contentForm.patchValue({ personalRating: this.personalRating });
       }
+    } else {
+      this.contentForm.reset({
+        type: 'movie',
+        year: new Date().getFullYear(),
+        status: 'planned',
+        platform: '',
+        rating: null,
+        personalRating: this.personalRating
+      });
     }
   }
 
-  rateAspect(aspect: 'acting' | 'story' | 'visual' | 'sound', rating: number) {
+  rateAspect(aspect: 'acting' | 'story' | 'visuals' | 'sound', rating: number) {
     this.personalRating[aspect] = rating;
     this.contentForm.patchValue({ personalRating: this.personalRating });
   }
@@ -86,11 +97,27 @@ export class ContentDialogComponent implements OnInit {
       const formValue = this.contentForm.value;
       const content: MediaContent = {
         id: this.content?.id || '',
-        ...formValue,
-        tags: formValue.tags ? formValue.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag) : [],
-        cast: formValue.cast ? formValue.cast.split(',').map((actor: string) => actor.trim()).filter((actor: string) => actor) : [],
-        recommendTo: formValue.recommendTo ? formValue.recommendTo.split(',').map((person: string) => person.trim()).filter((person: string) => person) : []
+        title: formValue.title,
+        type: formValue.type,
+        year: formValue.year,
+        releaseYear: formValue.releaseYear,
+        status: formValue.status,
+        platform: formValue.platform,
+        posterUrl: formValue.posterUrl,
+        rating: formValue.rating,
+        mood: formValue.mood,
+        watchDate: formValue.watchDate,
+        personalRating: {
+          story: this.personalRating.story,
+          acting: this.personalRating.acting,
+          visuals: this.personalRating.visuals,
+          sound: this.personalRating.sound
+        },
+        tags: formValue.tags ? 
+          formValue.tags.split(',').map((tag: string) => tag.trim()).filter((tag: string) => tag) : 
+          []
       };
+      
       this.save.emit(content);
     }
   }

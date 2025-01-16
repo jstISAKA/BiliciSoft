@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   selectedType = 'all';
   selectedStatus = 'all';
   selectedSort = 'newest';
+  selectedPlatform = 'all';
   showDialog = false;
   selectedContent: MediaContent | null = null;
   
@@ -32,13 +33,27 @@ export class AppComponent implements OnInit {
     this.loadContent();
   }
   
+  getPlatformName(platform: string): string {
+    const platforms: { [key: string]: string } = {
+      'netflix': 'Netflix',
+      'prime': 'Amazon Prime',
+      'disney': 'Disney+',
+      'hbo': 'HBO Max',
+      'apple': 'Apple TV+',
+      'mubi': 'MUBI',
+      'other': 'Diğer'
+    };
+    return platforms[platform] || platform;
+  }
+  
   get filteredContent(): MediaContent[] {
     return this.contentList
       .filter(item => {
         const matchesSearch = item.title.toLowerCase().includes(this.searchTerm.toLowerCase());
         const matchesType = this.selectedType === 'all' || item.type === this.selectedType;
         const matchesStatus = this.selectedStatus === 'all' || item.status === this.selectedStatus;
-        return matchesSearch && matchesType && matchesStatus;
+        const matchesPlatform = this.selectedPlatform === 'all' || item.platform === this.selectedPlatform;
+        return matchesSearch && matchesType && matchesStatus && matchesPlatform;
       })
       .sort((a, b) => {
         switch (this.selectedSort) {
@@ -66,7 +81,7 @@ export class AppComponent implements OnInit {
   }
   
   editContent(content: MediaContent) {
-    this.selectedContent = content;
+    this.selectedContent = { ...content };
     this.showDialog = true;
   }
   

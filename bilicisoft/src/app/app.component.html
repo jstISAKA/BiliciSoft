@@ -4,16 +4,18 @@
     <div class="navbar-brand">
       <h1><i class="fas fa-film"></i> Film/Dizi Takipçisi</h1>
     </div>
-    <div class="navbar-menu">
-      <button class="btn-primary" (click)="openAddContentDialog()">
-        <i class="fas fa-plus"></i> Yeni Ekle
-      </button>
-    </div>
   </div>
 </nav>
 
 <!-- Ana İçerik -->
 <main class="container main-content">
+  <!-- Üst Kısım - İstatistikler ve Yeni Ekle -->
+  <div class="content-header">
+    <button class="btn-primary add-content" (click)="openAddContentDialog()">
+      <i class="fas fa-plus"></i> Yeni Film/Dizi Ekle
+    </button>
+  </div>
+  
   <!-- İstatistik Kartları -->
   <section class="stats-grid">
     <div class="stat-card watching">
@@ -90,6 +92,23 @@
           <option value="rating">En Yüksek Puan</option>
         </select>
       </div>
+
+      <div class="filter-group">
+        <label>Platform</label>
+        <select 
+          [(ngModel)]="selectedPlatform" 
+          name="selectedPlatform"
+          aria-label="Platform seçin">
+          <option value="all">Tüm Platformlar</option>
+          <option value="netflix">Netflix</option>
+          <option value="prime">Amazon Prime</option>
+          <option value="disney">Disney+</option>
+          <option value="hbo">HBO Max</option>
+          <option value="apple">Apple TV+</option>
+          <option value="mubi">MUBI</option>
+          <option value="other">Diğer</option>
+        </select>
+      </div>
     </div>
   </section>
 
@@ -109,6 +128,9 @@
         <div class="media-meta">
           <span class="year">{{item.year}}</span>
           <span class="type">{{item.type === 'movie' ? 'Film' : 'Dizi'}}</span>
+          <span class="platform" *ngIf="item.platform && item.platform !== 'other'">
+            {{getPlatformName(item.platform)}}
+          </span>
         </div>
         
         <div class="media-rating" *ngIf="item.rating">
