@@ -1,0 +1,324 @@
+@use 'src/styles/variables' as *;
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.dialog-content {
+  background: $card-background;
+  border-radius: $border-radius-lg;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: $shadow-lg;
+  border: 1px solid rgba($primary-color, 0.1);
+  animation: scaleIn 0.3s $transition-timing;
+}
+
+.dialog-header {
+  padding: $spacing-unit * 4;
+  border-bottom: 1px solid rgba($primary-color, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $gradient-dark;
+
+  h2 {
+    margin: 0;
+    font-size: $font-size-lg;
+    color: $text-primary;
+    font-weight: $font-weight-bold;
+  }
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-secondary;
+    background: rgba($primary-color, 0.1);
+    transition: all $transition-speed;
+
+    &:hover {
+      background: $primary-color;
+      color: $text-primary;
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.dialog-form {
+  padding: $spacing-unit * 4;
+
+  .form-section {
+    background: rgba($secondary-color, 0.2);
+    border-radius: $border-radius;
+    padding: $spacing-unit * 4;
+    margin-bottom: $spacing-unit * 4;
+    border: 1px solid rgba($primary-color, 0.1);
+
+    h3 {
+      margin: 0 0 $spacing-unit * 3;
+      color: $primary-color;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+    }
+  }
+
+  .form-group {
+    margin-bottom: $spacing-unit * 3;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-unit * 3;
+  }
+
+  label {
+    display: block;
+    margin-bottom: $spacing-unit * 2;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: $spacing-unit * 2.5;
+    background: rgba($secondary-color, 0.3);
+    border: 2px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius;
+    color: $text-primary;
+    font-size: $font-size-base;
+    transition: all $transition-speed;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 4px rgba($primary-color, 0.1);
+    }
+
+    &::placeholder {
+      color: rgba($text-secondary, 0.5);
+    }
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ff4b1f' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $spacing-unit * 3 center;
+    padding-right: $spacing-unit * 8;
+  }
+}
+
+.rating-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: $spacing-unit * 3;
+  margin-bottom: $spacing-unit * 4;
+}
+
+.rating-item {
+  text-align: center;
+
+  .star-rating {
+    color: rgba($primary-color, 0.3);
+    font-size: $font-size-xl;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: $spacing-unit;
+
+    i {
+      transition: all $transition-speed;
+
+      &.fa-star {
+        color: $primary-color;
+      }
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+}
+
+.mood-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-unit * 2;
+
+  button {
+    padding: $spacing-unit * 2 $spacing-unit * 3;
+    border: 2px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius-lg;
+    background: rgba($secondary-color, 0.3);
+    color: $text-secondary;
+    cursor: pointer;
+    transition: all $transition-speed;
+    display: flex;
+    align-items: center;
+    gap: $spacing-unit * 2;
+
+    &.selected {
+      background: $gradient-primary;
+      color: $text-primary;
+      border-color: transparent;
+      transform: translateY(-2px);
+      box-shadow: $shadow-sm;
+    }
+
+    &:hover:not(.selected) {
+      border-color: $primary-color;
+      color: $primary-color;
+    }
+
+    i {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+.image-preview {
+  margin-top: $spacing-unit * 2;
+  border-radius: $border-radius;
+  overflow: hidden;
+  max-height: 200px;
+  border: 2px solid rgba($primary-color, 0.1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: $spacing-unit * 2;
+  margin: $spacing-unit * 3 0;
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid rgba($primary-color, 0.3);
+    appearance: none;
+    cursor: pointer;
+    position: relative;
+    transition: all $transition-speed;
+
+    &:checked {
+      background: $primary-color;
+      border-color: $primary-color;
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        color: $text-primary;
+        font-size: 14px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  label {
+    margin: 0;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: $font-size-base;
+    color: $text-primary;
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-unit * 2;
+  margin-top: $spacing-unit * 4;
+  padding-top: $spacing-unit * 4;
+  border-top: 1px solid rgba($primary-color, 0.1);
+
+  button {
+    padding: $spacing-unit * 2.5 $spacing-unit * 4;
+    border-radius: $border-radius;
+    font-weight: $font-weight-semibold;
+    transition: all $transition-speed;
+
+    &.btn-secondary {
+      background: rgba($secondary-color, 0.3);
+      color: $text-secondary;
+
+      &:hover {
+        background: rgba($secondary-color, 0.5);
+        color: $text-primary;
+      }
+    }
+
+    &.btn-primary {
+      background: $gradient-primary;
+      color: $text-primary;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-sm;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Scrollbar Stili
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba($secondary-color, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($primary-color, 0.3);
+  border-radius: 4px;
+
+  &:hover {
+    background: $primary-color;
+  }
+} 

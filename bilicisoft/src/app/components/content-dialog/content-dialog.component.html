@@ -1,0 +1,200 @@
+<div class="dialog-overlay" (click)="close.emit()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>{{content ? 'Düzenle' : 'Yeni İçerik Ekle'}}</h2>
+      <button class="btn-icon" (click)="close.emit()" title="Kapat">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="contentForm" (ngSubmit)="onSubmit()" class="dialog-form">
+      <!-- Temel Bilgiler -->
+      <div class="form-section">
+        <h3>Temel Bilgiler</h3>
+        <div class="form-group">
+          <label for="title">Başlık</label>
+          <input id="title" type="text" formControlName="title">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="type">Tür</label>
+            <select id="type" formControlName="type">
+              <option value="movie">Film</option>
+              <option value="series">Dizi</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="year">Yıl</label>
+            <input id="year" type="number" formControlName="year">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="director">Yönetmen</label>
+            <input id="director" type="text" formControlName="director">
+          </div>
+
+          <div class="form-group">
+            <label for="duration">Süre (dk)</label>
+            <input id="duration" type="number" formControlName="duration">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cast">Oyuncular (virgülle ayırın)</label>
+          <input id="cast" type="text" formControlName="cast">
+        </div>
+      </div>
+
+      <!-- İzleme Durumu -->
+      <div class="form-section">
+        <h3>İzleme Bilgileri</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="status">Durum</label>
+            <select id="status" formControlName="status">
+              <option value="planned">İzlenecek</option>
+              <option value="watching">İzleniyor</option>
+              <option value="completed">Tamamlandı</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="platform">İzleme Platformu</label>
+            <input id="platform" type="text" formControlName="platform">
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="contentForm.get('type')?.value === 'series'">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="seasonCount">Sezon Sayısı</label>
+              <input id="seasonCount" type="number" formControlName="seasonCount">
+            </div>
+            <div class="form-group">
+              <label for="currentEpisode">Mevcut Bölüm</label>
+              <input id="currentEpisode" type="number" formControlName="currentEpisode">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="watchDate">İzleme Tarihi</label>
+          <input id="watchDate" type="date" formControlName="watchDate">
+        </div>
+      </div>
+
+      <!-- Değerlendirme -->
+      <div class="form-section">
+        <h3>Değerlendirme</h3>
+        <div class="rating-grid">
+          <div class="rating-item">
+            <label>Oyunculuk</label>
+            <div class="star-rating">
+              <i *ngFor="let star of [1,2,3,4,5]" 
+                class="fas"
+                [class.fa-star]="personalRating.acting >= star"
+                [class.fa-star-regular]="personalRating.acting < star"
+                (click)="rateAspect('acting', star)">
+              </i>
+            </div>
+          </div>
+          <div class="rating-item">
+            <label>Hikaye</label>
+            <div class="star-rating">
+              <i *ngFor="let star of [1,2,3,4,5]" 
+                class="fas"
+                [class.fa-star]="personalRating.story >= star"
+                [class.fa-star-regular]="personalRating.story < star"
+                (click)="rateAspect('story', star)">
+              </i>
+            </div>
+          </div>
+          <div class="rating-item">
+            <label>Görsellik</label>
+            <div class="star-rating">
+              <i *ngFor="let star of [1,2,3,4,5]" 
+                class="fas"
+                [class.fa-star]="personalRating.visual >= star"
+                [class.fa-star-regular]="personalRating.visual < star"
+                (click)="rateAspect('visual', star)">
+              </i>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Ruh Hali</label>
+          <div class="mood-selector">
+            <button type="button" 
+              *ngFor="let mood of moods" 
+              [class.selected]="contentForm.get('mood')?.value === mood.value"
+              (click)="selectMood(mood.value)">
+              <i [class]="mood.icon"></i>
+              {{mood.label}}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="review">İnceleme</label>
+          <textarea id="review" formControlName="review" rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="personalNotes">Kişisel Notlar</label>
+          <textarea id="personalNotes" formControlName="personalNotes" rows="3"></textarea>
+        </div>
+      </div>
+
+      <!-- Görseller -->
+      <div class="form-section">
+        <h3>Görseller</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="posterUrl">Afiş URL'i</label>
+            <input id="posterUrl" type="url" formControlName="posterUrl">
+            <div class="image-preview" *ngIf="contentForm.get('posterUrl')?.value">
+              <img [src]="contentForm.get('posterUrl')?.value" alt="Afiş önizleme">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="bannerUrl">Banner URL'i</label>
+            <input id="bannerUrl" type="url" formControlName="bannerUrl">
+            <div class="image-preview" *ngIf="contentForm.get('bannerUrl')?.value">
+              <img [src]="contentForm.get('bannerUrl')?.value" alt="Banner önizleme">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Etiketler ve Diğer -->
+      <div class="form-section">
+        <h3>Etiketler ve Diğer</h3>
+        <div class="form-group">
+          <label for="tags">Etiketler (virgülle ayırın)</label>
+          <input id="tags" type="text" formControlName="tags">
+        </div>
+
+        <div class="form-group">
+          <label for="recommendTo">Önerilen Kişiler (virgülle ayırın)</label>
+          <input id="recommendTo" type="text" formControlName="recommendTo">
+        </div>
+
+        <div class="form-check">
+          <input type="checkbox" id="favorite" formControlName="favorite">
+          <label for="favorite">Favorilere Ekle</label>
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn-secondary" (click)="close.emit()">İptal</button>
+        <button type="submit" class="btn-primary" [disabled]="!contentForm.valid">Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div> 

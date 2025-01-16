@@ -1,0 +1,143 @@
+<!-- Ana Navigasyon -->
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-brand">
+      <h1><i class="fas fa-film"></i> Film/Dizi Takipçisi</h1>
+    </div>
+    <div class="navbar-menu">
+      <button class="btn-primary" (click)="openAddContentDialog()">
+        <i class="fas fa-plus"></i> Yeni Ekle
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Ana İçerik -->
+<main class="container main-content">
+  <!-- İstatistik Kartları -->
+  <section class="stats-grid">
+    <div class="stat-card watching">
+      <i class="fas fa-eye"></i>
+      <div class="stat-info">
+        <h3>İzleniyor</h3>
+        <p>{{watchingList.length}}</p>
+      </div>
+    </div>
+    <div class="stat-card completed">
+      <i class="fas fa-check-circle"></i>
+      <div class="stat-info">
+        <h3>Tamamlanan</h3>
+        <p>{{completedCount}}</p>
+      </div>
+    </div>
+    <div class="stat-card planned">
+      <i class="fas fa-clock"></i>
+      <div class="stat-info">
+        <h3>Planlanan</h3>
+        <p>{{plannedCount}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Arama ve Filtreleme -->
+  <section class="filters">
+    <div class="search-box">
+      <i class="fas fa-search search-icon"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        placeholder="Film veya dizi ara..."
+        class="search-input"
+        name="searchTerm"
+        aria-label="İçerik ara"
+      >
+    </div>
+    
+    <div class="filter-options">
+      <div class="filter-group">
+        <label>Tür</label>
+        <select 
+          [(ngModel)]="selectedType" 
+          name="selectedType"
+          aria-label="İçerik türü seçin">
+          <option value="all">Tüm Türler</option>
+          <option value="movie">Filmler</option>
+          <option value="series">Diziler</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>İzleme Durumu</label>
+        <select 
+          [(ngModel)]="selectedStatus" 
+          name="selectedStatus"
+          aria-label="İzleme durumu seçin">
+          <option value="all">Tüm Durumlar</option>
+          <option value="watching">İzleniyor</option>
+          <option value="completed">Tamamlandı</option>
+          <option value="planned">İzlenecek</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Sıralama</label>
+        <select 
+          [(ngModel)]="selectedSort" 
+          name="selectedSort"
+          aria-label="Sıralama türü seçin">
+          <option value="newest">En Yeni</option>
+          <option value="oldest">En Eski</option>
+          <option value="rating">En Yüksek Puan</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- İçerik Listesi -->
+  <section class="content-grid">
+    <div class="media-card" *ngFor="let item of filteredContent">
+      <div class="media-image">
+        <img [src]="item.posterUrl || 'assets/default-poster.jpg'" [alt]="item.title + ' afişi'" title="{{item.title}}">
+        <div class="media-status" [class]="item.status">
+          {{item.status === 'watching' ? 'İzleniyor' : 
+            item.status === 'completed' ? 'Tamamlandı' : 'İzlenecek'}}
+        </div>
+      </div>
+      
+      <div class="media-info">
+        <h3>{{item.title}}</h3>
+        <div class="media-meta">
+          <span class="year">{{item.year}}</span>
+          <span class="type">{{item.type === 'movie' ? 'Film' : 'Dizi'}}</span>
+        </div>
+        
+        <div class="media-rating" *ngIf="item.rating">
+          <i class="fas fa-star"></i>
+          <span>{{item.rating}}/5</span>
+        </div>
+
+        <div class="media-tags">
+          <span class="tag" *ngFor="let tag of item.tags">
+            {{tag}}
+          </span>
+        </div>
+      </div>
+
+      <div class="media-actions">
+        <button class="btn-icon edit" (click)="editContent(item)" title="Düzenle">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-icon delete" (click)="deleteContent(item.id)" title="Sil">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-content-dialog
+  *ngIf="showDialog"
+  [content]="selectedContent"
+  (close)="closeDialog()"
+  (save)="saveContent($event)">
+</app-content-dialog>
